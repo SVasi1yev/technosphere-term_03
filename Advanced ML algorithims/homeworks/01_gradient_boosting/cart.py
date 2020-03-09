@@ -18,29 +18,14 @@ class CART:
         self.min_samples_split = min_samples_split
         self.max_depth = max_depth
         self.eps = eps
+        self.max_features = max_features
 
-        if max_features == 'sqrt':
-            self.get_feature_ids = self.__get_feature_ids_sqrt
-        elif max_features == 'log2':
-            self.get_feature_ids = self.__get_feature_ids_log2
-        elif max_features == None:
-            self.get_feature_ids = self.__get_feature_ids_N
-        else:
-            print('invalid max_features name')
-            raise
-
-    def __get_feature_ids_sqrt(self, n_feature):
-        feature_ids = range(n_feature)
-        np.random.shuffle(feature_ids)
-        return feature_ids[:round(np.sqrt(n_feature))]
-
-    def __get_feature_ids_log2(self, n_feature):
-        feature_ids = range(n_feature)
-        np.random.shuffle(feature_ids)
-        return feature_ids[:round(np.log2(n_feature))]
-
-    def __get_feature_ids_N(self, n_feature):
-        return range(n_feature)
+    def get_feature_ids(self, num_features):
+        features_ids = np.arange(self.data_shape[1])
+        if not (num_features is None or num_features >= self.data_shape[1]):
+            features_ids = features_ids[:num_features]
+            np.random.shuffle(features_ids)
+        return features_ids
 
     def __sort_samples(self, x, y):
         sorted_idx = x.argsort()
@@ -66,6 +51,9 @@ class CART:
         N_l = np.arange(1, y.shape[0])
         N_r = N_l[::-1]
         gains = (N_l / N) * vars_left + (N_r/ N) * vars_right
+        if self.min_leaf_size > 1:
+            gains[:self.min_leaf_size-1] = np.array([np.inf] * (self.min_leaf_size - 1))
+            gains[-(self.min_leaf_size-1):] = np.array([np.inf] * (self.min_leaf_size - 1))
         diff = np.where(np.abs(sorted_x[1:] - sorted_x[:-1]) > self.eps)[0]
         if len(diff) == 0:
             return np.inf, 0
@@ -79,7 +67,7 @@ class CART:
             self.tree[node_id] = (self.__class__.LEAF_TYPE, y.mean())
             return
 
-        features = self.get_feature_ids(x.shape[1])
+        features = self.get_feature_ids(self.max_features)
         thrs = np.array([self.__find_threshold(x[:, feature], y) for feature in features])
         best_feature = thrs[:, 0].argmin()
         if thrs[best_feature, 0] == np.inf:
@@ -99,6 +87,9 @@ class CART:
         self.__fit_node(r_x, r_y, node_id * 2 + 2, depth + 1)
 
     def fit(self, x, y):
+        x = np.array(x)
+        y = np.array(y)
+        self.data_shape = x.shape
         self.__fit_node(x, y, 0, 0)
 
     def __predict(self, x, node_id):
