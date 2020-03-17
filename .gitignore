@@ -1,2 +1,7 @@
 cloudera-quickstart*/
 .ipynb_checkpoints/
+.idea/
+.gradle/
+build/
+__pycache__/
+*.zip/
