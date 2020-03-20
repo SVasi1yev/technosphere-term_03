@@ -62,7 +62,7 @@ class GradientBoosting:
                 cur_estimator.fit(X, grad)
             self.estimators.append(cur_estimator)
             pred = cur_estimator.predict(X)
-            # b = golden_section(res, pred, y)\
+            # b = golden_section(res, pred, y)
             b = 1
             self.weights.append(b)
             res += self.learning_rate * b * pred
