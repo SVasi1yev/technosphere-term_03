@@ -5,3 +5,5 @@ cloudera-quickstart*/
 build/
 __pycache__/
 *.zip/
+*.gz
+*.txt
