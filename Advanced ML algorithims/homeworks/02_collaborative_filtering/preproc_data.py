@@ -1,8 +1,9 @@
 import numpy as np
+import sys
 
 np.random.seed(0)
 
-with open("movie-recomendation-ts-spring-2020/train.txt", 'r') as f:
+with open(sys.argv[1], 'r') as f:
     events = []
     user_num = 0
     item_num = 0
@@ -34,7 +35,7 @@ for i in permute_valid:
 np.save("np_train", train_data)
 np.save("np_valid", valid_data)
 
-with open("movie-recomendation-ts-spring-2020/test.txt", 'r') as f:
+with open(sys.argv[2], 'r') as f:
     events = []
     for line in f:
         event = tuple(int(e) for e in line.split('\t'))
