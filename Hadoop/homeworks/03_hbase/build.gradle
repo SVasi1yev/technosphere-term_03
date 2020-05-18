@@ -1,0 +1,31 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    maven {
+        name = 'cloudera'
+        url = 'https://repository.cloudera.com/artifactory/cloudera-repos'
+    }
+    mavenCentral()
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'RobotsFilterJob'
+        )
+    }
+}
+
+dependencies {
+    compile 'org.apache.hadoop:hadoop-common:2.6.0-cdh5.14.0'
+    compile 'org.apache.hadoop:hadoop-mapreduce-client-core:2.6.0-cdh5.14.0'
+    compile group: 'org.apache.hbase', name: 'hbase', version: '0.94.5'
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+    compile 'junit:junit:4.12'
+}
