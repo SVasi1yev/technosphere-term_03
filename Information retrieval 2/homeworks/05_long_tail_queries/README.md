@@ -3,7 +3,7 @@
 Остальные файлы находятся в папке meta_data  
 hadoop jar 05_long_tail_queries.jar DocDocQueryStatsJob 2017 url_features url.data queries.tsv train.marks.tsv sample.csv url  
 Полученные файлы переименовать и поместить в папку: url_features/global_features.tsv, url_features/train_query_features.tsv, url_features/test_query_features.tsv  
-hadoop jar 05_long_tail_queries.jar DocDocQueryStatsJob /user/r.kurbanov/hw3/2017 host_features host.data queries.tsv train_host.tsv test_host.csv host  
+hadoop jar 05_long_tail_queries.jar DocDocQueryStatsJob 2017 host_features host.data queries.tsv train_host.tsv test_host.csv host  
 Полученные файлы переименовать и поместить в папку: host_features/global_features.tsv, host_features/query_features.tsv
 
 # lemmatizer.py
